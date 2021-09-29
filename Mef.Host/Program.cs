@@ -1,4 +1,6 @@
 ﻿using System;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
@@ -14,11 +16,38 @@ namespace Mef.Host
 {
     internal class Program
     {
-
         static async Task Main(string[] args)
         {
-            await new App().Run();
+            var rootCommand = new RootCommand("vs-mef with custom AssemblyLoadContexts")
+            {
+                new Option<Loader>("--loader")
+            };
+            rootCommand.Handler = CommandHandler.Create(
+                async (Loader loader) =>
+                {
+                    Resolver resolver;
+                    switch (loader)
+                    {
+                        case Loader.Isolated:
+                            resolver = new IsolatedResolver();
+                            break;
+                        case Loader.Plugin:
+                        default:
+                            resolver = new PluginResolver();
+                            break;
+                    }
+                    Console.WriteLine($"Using {resolver.GetType().Name}");
+
+                    await new App().Run(resolver);
+                });
+            await rootCommand.InvokeAsync(args);
         }
+    }
+
+    enum Loader
+    {
+        Isolated,
+        Plugin
     }
 
     public class App
@@ -37,13 +66,8 @@ namespace Mef.Host
             _externalExtensionDllPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, path, "Mef.ExternalExtension.dll"));
         }
 
-        public async Task Run()
+        public async Task Run(Resolver resolver)
         {
-            // Pick flavor of Resolver
-            Resolver resolver;
-            resolver = new IsolatedResolver();
-            //resolver = new PluginResolver();
-
             var discovery = PartDiscovery.Combine(resolver,
                 new AttributedPartDiscoveryV1(resolver)); // ".NET MEF" attributes (System.ComponentModel.Composition)
 
@@ -55,10 +79,14 @@ namespace Mef.Host
                         _hostExtensionDllPath,
                     }));
 
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\tPart IDs found");
             foreach(var id in catalog.Parts.Select(c => c.Id))
             {
-                Console.WriteLine($"Part id: {id}");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"\t\t{id}");
             }
+            Console.ForegroundColor = ConsoleColor.White;
 
             var exportProvider = CompositionConfiguration
                 .Create(catalog)
