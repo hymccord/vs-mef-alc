@@ -21,9 +21,10 @@ namespace Mef.HostExtension
 
             var assembly = Assembly.GetExecutingAssembly();
             var jsonAssembly = typeof(JsonConvert).Assembly;
+            var jsonAssemblyName = AssemblyName.GetAssemblyName(jsonAssembly.Location);
             Console.WriteLine($@"   {nameof(HostExtension)} created
         My directory is: {Directory.GetParent(assembly.Location).FullName}
-        Using Newtonsoft.Json {jsonAssembly.FullName}
+        Using Newtonsoft.Json v{jsonAssemblyName.Version}
         {JsonConvert.ToString(DateTime.Now)}");
 
         }

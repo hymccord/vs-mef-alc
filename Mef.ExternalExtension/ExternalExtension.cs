@@ -20,13 +20,12 @@ namespace Mef.ExternalExtension
         {
             _import = import;
 
-            // Calling AssemblyName.GetAssemblyName throws. Not sure why yet.
-
             var assembly = Assembly.GetExecutingAssembly();
             var jsonAssembly = typeof(JsonConvert).Assembly;
+            var jsonAssemblyName = AssemblyName.GetAssemblyName(jsonAssembly.Location);
             Console.WriteLine($@"   {nameof(ExternalExtension)} created
         My directory is: {Directory.GetParent(assembly.Location).FullName}
-        Using Newtonsoft.Json {jsonAssembly.FullName}
+        Using Newtonsoft.Json v{jsonAssemblyName.Version}
         {JsonConvert.ToString(DateTime.Now)}");
 
         }
