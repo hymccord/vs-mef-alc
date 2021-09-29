@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Reflection;
@@ -22,11 +23,14 @@ namespace Mef.HostExtension
             var assembly = Assembly.GetExecutingAssembly();
             var jsonAssembly = typeof(JsonConvert).Assembly;
             var jsonAssemblyName = AssemblyName.GetAssemblyName(jsonAssembly.Location);
-            Console.WriteLine($@"   {nameof(HostExtension)} created
-        My directory is: {Directory.GetParent(assembly.Location).FullName}
-        Using Newtonsoft.Json v{jsonAssemblyName.Version}
-        {JsonConvert.ToString(DateTime.Now)}");
 
+            var writer = new IndentedTextWriter(Console.Out, "\t") { Indent = 1 };
+            writer.WriteLine();
+            writer.WriteLine($"{nameof(HostExtension)} created");
+            writer.Indent++;
+            writer.WriteLine($"My directory is: {Directory.GetParent(assembly.Location).FullName}");
+            writer.WriteLine($"Using Newtonsoft.Json v{jsonAssemblyName.Version}");
+            writer.WriteLine($"JsonConvert.ToString(DateTime.Now) -> {JsonConvert.ToString(DateTime.Now)}");
         }
     }
 }
