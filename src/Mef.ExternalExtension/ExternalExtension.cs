@@ -17,9 +17,8 @@ namespace Mef.ExternalExtension
         private readonly IImport _import;
 
         [ImportingConstructor]
-        public ExternalExtension(IImport import)
+        public ExternalExtension()
         {
-            _import = import;
 
             var assembly = Assembly.GetExecutingAssembly();
             var jsonAssembly = typeof(JsonConvert).Assembly;

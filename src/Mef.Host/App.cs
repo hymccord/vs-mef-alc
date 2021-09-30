@@ -16,6 +16,7 @@ namespace Mef.Host
     {
         private string _hostExtensionDllPath;
         private string _externalExtensionDllPath;
+        private string _externalExtensionV2DllPath;
         public App()
         {
             bool published = AppContext.BaseDirectory.Contains("publish");
@@ -26,6 +27,7 @@ namespace Mef.Host
                 ? Path.Combine("../../../../..", "Mef.ExternalExtension/bin/Debug/net5.0/publish")
                 : Path.Combine("../../../..", "Mef.ExternalExtension/bin/Debug/net5.0");
             _externalExtensionDllPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, path, "Mef.ExternalExtension.dll"));
+            _externalExtensionV2DllPath = _externalExtensionDllPath.Replace("ExternalExtension", "ExternalExtensionV2");
         }
 
         public async Task Run(Resolver resolver)
@@ -33,6 +35,7 @@ namespace Mef.Host
             var logger = new IndentedTextWriter(Console.Out, "\t");
 
             var discovery = PartDiscovery.Combine(resolver,
+                new AttributedPartDiscovery(resolver),
                 new AttributedPartDiscoveryV1(resolver)); // ".NET MEF" attributes (System.ComponentModel.Composition)
 
             var catalog = ComposableCatalog.Create(resolver)
@@ -40,6 +43,7 @@ namespace Mef.Host
                 .AddParts(await discovery.CreatePartsAsync(new string[]
                     {
                         _externalExtensionDllPath,
+                        _externalExtensionV2DllPath,
                         _hostExtensionDllPath,
                     }));
 

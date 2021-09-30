@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Composition" Version="5.0.1" ExcludeAssets="runtime" />
     <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mef.Contracts\Mef.Contracts.csproj" Private="false" ExcludeAssets="runtime" />
+    <ProjectReference Include="..\..\src\Mef.Contracts\Mef.Contracts.csproj" Private="false" ExcludeAssets="runtime" />
   </ItemGroup>
 
 </Project>

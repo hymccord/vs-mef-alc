@@ -1,6 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.IO;
 using System.Reflection;
 
@@ -8,16 +8,17 @@ using Mef.Contracts;
 
 using Newtonsoft.Json;
 
-namespace Mef.HostExtension
+namespace Mef.ExternalExtensionV2
 {
     //[Export(typeof(IExtension))]
-    public class HostExtension : IExtension
+    public class ExternalExtensionV2 : IExtension
     {
         private readonly IImport _import;
 
         [ImportingConstructor]
-        public HostExtension()
+        public ExternalExtensionV2(IImport import)
         {
+            _import = import;
 
             var assembly = Assembly.GetExecutingAssembly();
             var jsonAssembly = typeof(JsonConvert).Assembly;
@@ -25,7 +26,7 @@ namespace Mef.HostExtension
 
             var writer = new IndentedTextWriter(Console.Out, "\t") { Indent = 1 };
             writer.WriteLine();
-            writer.WriteLine($"{nameof(HostExtension)} created");
+            writer.WriteLine($"{nameof(ExternalExtensionV2)} created");
             writer.Indent++;
             writer.WriteLine($"My directory is: {Directory.GetParent(assembly.Location).FullName}");
             writer.WriteLine($"Using Newtonsoft.Json v{jsonAssemblyName.Version}");

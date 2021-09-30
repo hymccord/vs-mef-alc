@@ -7,11 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mef.Contracts\Mef.Contracts.csproj" />
+    <ProjectReference Include="..\Mef.Contracts\Mef.Contracts.csproj" Private="false" ExcludeAssets="runtime" />
   </ItemGroup>
 
 </Project>
