@@ -8,13 +8,13 @@ using Microsoft.VisualStudio.Composition;
 
 namespace Mef.Host
 {
-    public abstract class BaseAssemblyLoader<T> : IAssemblyLoader where T : AssemblyLoadContext
+    public abstract class BaseAssemblyLoader<T> : IAssemblyLoader where T : CustomLoadContextBase
     {
         /// <summary>
         /// A cache of assembly names to loaded assemblies.
         /// </summary>
-        private readonly Dictionary<AssemblyName, Assembly> _loadedAssemblies = new Dictionary<AssemblyName, Assembly>(ByValueEquality.AssemblyName);
-        private readonly ConcurrentDictionary<AssemblyName, AssemblyLoadContext> _loadedContexts = new ConcurrentDictionary<AssemblyName, AssemblyLoadContext>(ByValueEquality.AssemblyName);
+        private readonly Dictionary<AssemblyName, Assembly> _loadedAssemblies = new(ByValueEquality.AssemblyName);
+        private readonly ConcurrentDictionary<AssemblyName, AssemblyLoadContext> _loadedContexts = new(ByValueEquality.AssemblyName);
 
         /// <inheritdoc />
         public Assembly LoadAssembly(AssemblyName assemblyName)
@@ -35,9 +35,11 @@ namespace Mef.Host
                 AssemblyLoadContext loadContext;
                 lock (_loadedContexts)
                 {
+                    // You get an ALC! You get an ALC! EVERYBODY GETS ALCs!
+                    // The custom ALC can handle if the assembly will be loaded into the Default context if needed (like IsolatedLoadContext)
                     loadContext = _loadedContexts.GetOrAdd(assemblyName, (an) =>
                     {
-                        return (AssemblyLoadContext)Activator.CreateInstance(typeof(T), assemblyName.CodeBase)!;
+                        return (AssemblyLoadContext)Activator.CreateInstance(typeof(T), new object[] { AssemblyUnification.WellKnownAssemblyNames, assemblyName.CodeBase })!;
                     });
                 }
 

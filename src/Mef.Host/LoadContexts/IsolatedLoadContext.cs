@@ -7,23 +7,18 @@ using System.Runtime.Loader;
 namespace Mef.Host
 {
     // Simple ALC. Taken from MSBuildLoadContext in dotnet/msbuild
-    public class IsolatedLoadContext : AssemblyLoadContext
+    public sealed class IsolatedLoadContext : CustomLoadContextBase
     {
         private readonly string _directory;
 
-        public IsolatedLoadContext(string assemblyPath)
-            : base($"Isolated plugin {assemblyPath}")
+        public IsolatedLoadContext(IImmutableSet<string> assembliesToUnify, string assemblyPath)
+            : base(assembliesToUnify, $"Isolated plugin {assemblyPath}")
         {
             _directory = Directory.GetParent(assemblyPath)!.FullName;
         }
 
-        protected override Assembly? Load(AssemblyName assemblyName)
+        protected override Assembly? InternalLoad(AssemblyName assemblyName)
         {
-            if (AssemblyUnification.WellKnownAssemblyNames.Contains(assemblyName.Name!))
-            {
-                return null;
-            }
-
             foreach (var cultureSubfolder in string.IsNullOrEmpty(assemblyName.CultureName)
                 // If no culture is specified, attempt to load directly from
                 // the known dependency paths.
@@ -60,15 +55,5 @@ namespace Mef.Host
 
             return null;
         }
-    }
-
-    internal static class AssemblyUnification
-    {
-        internal static readonly ImmutableHashSet<string> WellKnownAssemblyNames =
-         new[]
-         {
-                    "Mef.Contracts",
-                    "System.ComponentModel.Composition"
-         }.ToImmutableHashSet();
     }
 }

@@ -8,11 +8,12 @@ namespace Mef.Host
 {
     // From MSDN documentation on ALCs
     // https://docs.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support
-    public class PluginLoadContext : AssemblyLoadContext
+    public class PluginLoadContext : CustomLoadContextBase
     {
         private readonly AssemblyDependencyResolver _resolver;
 
-        public PluginLoadContext(string pluginPath)
+        public PluginLoadContext(IImmutableSet<string> assembliesToUnify, string pluginPath)
+            : base(assembliesToUnify, pluginPath)
         {
             if (!Path.HasExtension(pluginPath))
             {
@@ -21,13 +22,8 @@ namespace Mef.Host
             _resolver = new AssemblyDependencyResolver(pluginPath);
         }
 
-        protected override Assembly? Load(AssemblyName assemblyName)
+        protected sealed override Assembly? InternalLoad(AssemblyName assemblyName)
         {
-            if (AssemblyUnification.WellKnownAssemblyNames.Contains(assemblyName.Name!))
-            {
-                return null;
-            }
-
             var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
             if (assemblyPath != null)
             {
