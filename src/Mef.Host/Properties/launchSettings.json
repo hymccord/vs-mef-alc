@@ -1,11 +1,22 @@
 {
   "profiles": {
-    "Mef.Host": {
-      "commandName": "Project"
+    "Host with PluginResolver": {
+      "commandName": "Project",
+      "commandLineArgs": "--loader plugin"
     },
-    "Published": {
+    "Host with IsolatedResolver": {
+      "commandName": "Project",
+      "commandLineArgs": "--loader isolated"
+    },
+    "Published Host with PluginResolver": {
       "commandName": "Executable",
-      "executablePath": "bin\\Debug\\net5.0\\publish\\Mef.Host.exe"
+      "executablePath": "bin\\$(Configuration)\\net5.0\\publish\\Mef.Host.exe",
+      "commandLineArgs": "--loader plugin"
+    },
+    "Published Host with IsolatedResolver": {
+      "commandName": "Executable",
+      "executablePath": "bin\\$(Configuration)\\net5.0\\publish\\Mef.Host.exe",
+      "commandLineArgs": "--loader isolated"
     }
   }
 }
