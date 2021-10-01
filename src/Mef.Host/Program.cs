@@ -1,7 +1,6 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.ComponentModel.Composition.Hosting;
 using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.Composition;

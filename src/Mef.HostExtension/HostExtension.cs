@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Mef.HostExtension
 {
-    //[Export(typeof(IExtension))]
+    [Export(typeof(IExtension))]
     public class HostExtension : IExtension
     {
         private readonly IImport _import;

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Mef.ExternalExtensionV2
 {
-    //[Export(typeof(IExtension))]
+    [Export(typeof(IExtension))]
     public class ExternalExtensionV2 : IExtension
     {
         private readonly IImport _import;
