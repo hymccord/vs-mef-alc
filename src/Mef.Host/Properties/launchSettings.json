@@ -10,12 +10,12 @@
     },
     "Published Host with PluginResolver": {
       "commandName": "Executable",
-      "executablePath": "bin\\$(Configuration)\\net5.0\\publish\\Mef.Host.exe",
+      "executablePath": "bin\\$(Configuration)\\net6.0\\publish\\Mef.Host.exe",
       "commandLineArgs": "--loader plugin"
     },
     "Published Host with IsolatedResolver": {
       "commandName": "Executable",
-      "executablePath": "bin\\$(Configuration)\\net5.0\\publish\\Mef.Host.exe",
+      "executablePath": "bin\\$(Configuration)\\net6.0\\publish\\Mef.Host.exe",
       "commandLineArgs": "--loader isolated"
     }
   }

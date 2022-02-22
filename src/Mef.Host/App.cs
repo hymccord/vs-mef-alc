@@ -24,8 +24,8 @@ namespace Mef.Host
             // <project>/bin/<config>/<tfm>/ -> ../../../..
 
             var path = published
-                ? Path.Combine("../../../../..", "Mef.ExternalExtension/bin/Debug/net5.0/publish")
-                : Path.Combine("../../../..", "Mef.ExternalExtension/bin/Debug/net5.0");
+                ? Path.Combine("../../../../..", "Mef.ExternalExtension/bin/Debug/net6.0/publish")
+                : Path.Combine("../../../..", "Mef.ExternalExtension/bin/Debug/net6.0");
             _externalExtensionDllPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, path, "Mef.ExternalExtension.dll"));
             _externalExtensionV2DllPath = _externalExtensionDllPath.Replace("ExternalExtension", "ExternalExtensionV2");
         }
