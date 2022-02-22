@@ -1,6 +1,5 @@
 ﻿using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.Composition;
@@ -11,28 +10,31 @@ namespace Mef.Host
     {
         static async Task Main(string[] args)
         {
+            var loaderOption = new Option<Loader>(
+                "--loader",
+                getDefaultValue: () => Loader.Plugin,
+                description: "An option to specify what assembly loader to use: isolated or plugin (default)"
+            );
+
             var rootCommand = new RootCommand("vs-mef with custom AssemblyLoadContexts")
             {
-                new Option<Loader>("--loader")
+                loaderOption
             };
-            rootCommand.Handler = CommandHandler.Create(
+
+            rootCommand.SetHandler(
                 async (Loader loader) =>
                 {
-                    Resolver resolver;
-                    switch (loader)
+                    Resolver resolver = loader switch
                     {
-                        case Loader.Isolated:
-                            resolver = new IsolatedResolver();
-                            break;
-                        case Loader.Plugin:
-                        default:
-                            resolver = new PluginResolver();
-                            break;
-                    }
+                        Loader.Isolated => new IsolatedResolver(),
+                        Loader.Plugin => new PluginResolver(),
+                        _ => throw new NotImplementedException(),
+                    };
                     Console.WriteLine($"Using {resolver.GetType().Name}");
 
                     await new App().Run(resolver);
-                });
+                }, loaderOption);
+
             await rootCommand.InvokeAsync(args);
         }
     }
