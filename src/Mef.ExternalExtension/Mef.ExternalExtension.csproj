@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- This version should be explicity a Major version different than Mef.ExtensionExtensionV2 -->
-    <PackageReference Include="Newtonsoft.Json" Version="[13.0.1]" />
+    <!-- This version should be explicity a Major version different than Mef.Host and Mef.ExtensionExtensionV2 -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" ExcludeAssets="runtime" />
   </ItemGroup>
 

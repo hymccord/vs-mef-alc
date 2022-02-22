@@ -8,14 +8,17 @@ The [PartDiscovery.Combine](https://github.com/microsoft/vs-mef/blob/1a202e5a008
 
 ## Sample "Extension" dlls
 
-There are currently two extension dlls.
+There are currently three extension dlls.
 
 * `Mef.HostExtension.dll`
   * Showcases what is essentially a "Host" extension that is built alongside your app and is put in alongside the host in the output folder
-  * Uses `Newtonsoft.Json` v13.0.1
+  * Uses `Newtonsoft.Json` v12.0.3
 * `Mef.ExternalExtension.dll`
   * This dll is located outside the the main app directory. You host app would have some sort of configuration setup that plugins need to hook to to tell the main app where they are stored. Ofc, there are many other different ways to go about this. It's just to showcase dlls outside of the main app path.
-  * Uses `Newtonsoft.Json` v12.0.3
+  * Uses `Newtonsoft.Json` v13.0.1
+* `Mef.ExternalExtensionV2.dll`
+  * Same as `Mef.ExternalExtension` but,
+  * Uses `Newtonsoft.Json` v11.0.1
 
 Also shows that different versions of Newtonsoft.Json are loaded inside the same appdomain with no problem. Each isolated to it's own extension.
 
@@ -50,7 +53,7 @@ You can build with Visual Studio or `dotnet build`
 
 ### Prerequisites
 
-This repo currently uses the latest build of [vs-mef](https://github.com/microsoft/vs-mef), currently v17.1.3-alpha.
+This repo currently uses the latest build of [vs-mef](https://github.com/microsoft/vs-mef), currently v17.2.33-alpha.
 You will need to `dotnet pack` that repo and put the packages in a place where the nuget restore can find them.
 
 Personally, I use the user level NuGet.Config located in %APPDATA%/NuGet/NuGet.config and add a line to where I put locally built packages
@@ -70,7 +73,7 @@ Once there is a nuget package of v17 available, you can just change the package 
 
 ## Running
 
-Once built (or publish), you can invoke the two available load context like so
+Once built (or published), you can invoke the two available load context like so
 
 Using the `IsolatedLoadContext`
 
