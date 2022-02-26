@@ -49,31 +49,13 @@ All imports would need to come from the contract provided interfaces or from wit
 
 ## Getting Started (developing)
 
-You can build with Visual Studio or `dotnet build`
+You can build with Visual Studio or `dotnet build`.
 
-### Prerequisites
-
-This repo currently uses the latest build of [vs-mef](https://github.com/microsoft/vs-mef), currently v17.2.33-alpha.
-You will need to `dotnet pack` that repo and put the packages in a place where the nuget restore can find them.
-
-Personally, I use the user level NuGet.Config located in %APPDATA%/NuGet/NuGet.config and add a line to where I put locally built packages
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
-    <add key="Microsoft Visual Studio Offline Packages" value="C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\" />
-    <add key="local-nuget-source" value="<MY_USER_PROFILE>\local-nuget-source\" />
-  </packageSources>
-</configuration>
-```
-
-Once there is a nuget package of v17 available, you can just change the package reference in Mef.Host to that version.
+Run tests with the Test Window or `dotnet test`.
 
 ## Running
 
-Once built (or published), you can invoke the two available load context like so
+Once built (or published), you can invoke the two available load context like so:
 
 Using the `IsolatedLoadContext`
 
